@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La Liga 2026/27 — серии</title>
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#f5f6f3; --surface:#ffffff; --surface2:#eef1ec; --text:#171a17; --muted:#5d685f; --line:#dde2da;
+  --accent:#1c7a4b; --accent-soft:#e2f1e8; --warn:#9a6212; --warn-soft:#fbf0d6; --hot:#b3312a; --hot-soft:#fbe5e2;
+  --c1:#1c7a4b; --cx:#6b7280; --c2:#2a5ea8; --shadow:0 1px 2px rgba(20,30,20,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1210; --surface:#161a17; --surface2:#1d221e; --text:#e7ebe7; --muted:#98a49b; --line:#2a312b;
+    --accent:#4cc38a; --accent-soft:#15321f; --warn:#e6b65c; --warn-soft:#382d15; --hot:#f0857c; --hot-soft:#3b1c19;
+    --c1:#4cc38a; --cx:#9aa3ad; --c2:#7fa9e6; --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1210; --surface:#161a17; --surface2:#1d221e; --text:#e7ebe7; --muted:#98a49b; --line:#2a312b;
+  --accent:#4cc38a; --accent-soft:#15321f; --warn:#e6b65c; --warn-soft:#382d15; --hot:#f0857c; --hot-soft:#3b1c19;
+  --c1:#4cc38a; --cx:#9aa3ad; --c2:#7fa9e6; --shadow:none;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--text);
+  font:14px/1.45 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  -webkit-text-size-adjust:100%}
+.wrap{max-width:1180px;margin:0 auto;padding:18px 16px 40px}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 20px;margin-bottom:14px}
+h1{font-size:22px;line-height:1.2;margin:0;font-weight:700;letter-spacing:-.01em}
+.sub{color:var(--muted);margin-top:4px}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:4px 10px;border-radius:999px;
+  background:var(--surface2);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
+.badge i{width:7px;height:7px;border-radius:50%;background:var(--muted);display:inline-block}
+.badge.ok i{background:var(--accent)} .badge.ok{color:var(--accent)}
+.badge.err i{background:var(--hot)} .badge.err{color:var(--hot)}
+.badge.busy i{background:var(--warn)}
+nav{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);margin-bottom:16px;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{appearance:none;background:none;border:0;border-bottom:2px solid transparent;color:var(--muted);
+  padding:10px 14px;font:inherit;font-weight:600;cursor:pointer;white-space:nowrap;margin-bottom:-1px}
+nav button:hover{color:var(--text)}
+nav button[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+nav button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,.seg button:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+section[hidden]{display:none}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 13px;box-shadow:var(--shadow)}
+.kpi b{display:block;font-size:20px;line-height:1.2;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12px}
+.kpi small{display:block;color:var(--muted);font-size:11.5px;margin-top:2px;font-variant-numeric:tabular-nums}
+.callout{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:12px 14px;margin-bottom:16px;box-shadow:var(--shadow)}
+.callout.sig{border-color:var(--warn);background:var(--warn-soft)}
+.callout h3{margin:0 0 4px;font-size:14px}
+.callout p{margin:0;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{background:var(--surface);border:1px solid var(--warn);color:var(--text);border-radius:999px;padding:2px 10px;font-size:12.5px;font-variant-numeric:tabular-nums}
+.tw{overflow:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface);box-shadow:var(--shadow)}
+.tw.tall{max-height:72vh}
+table{border-collapse:separate;border-spacing:0;width:100%;font-variant-numeric:tabular-nums}
+th,td{padding:7px 10px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+th{position:sticky;top:0;z-index:2;background:var(--surface2);color:var(--muted);font-size:12px;font-weight:600;text-align:right}
+th:first-child,td:first-child{text-align:left}
+td.l,th.l{text-align:left}
+td.c,th.c{text-align:center}
+tr:last-child td{border-bottom:0}
+tr.grp td{background:var(--surface2);color:var(--muted);font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px}
+tr.sig td{background:var(--warn-soft)}
+tr.over td{background:var(--hot-soft)}
+td.cat{font-weight:600}
+.cur{font-weight:700}
+.bar{position:relative;width:96px;height:8px;border-radius:4px;background:var(--surface2);border:1px solid var(--line);display:inline-block;vertical-align:middle;margin-left:8px}
+.bar i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:var(--accent)}
+.bar b{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--muted);opacity:.7}
+tr.sig .bar i{background:var(--warn)} tr.over .bar i{background:var(--hot)}
+.pct{display:inline-block;min-width:44px}
+.note{color:var(--muted);font-size:12.5px;margin:10px 2px 0}
+.tools{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin-bottom:10px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{appearance:none;background:none;border:0;padding:7px 12px;font:inherit;color:var(--muted);cursor:pointer;border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent);font-weight:600}
+select,textarea,.btn{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--line);border-radius:8px}
+select{padding:7px 8px}
+.btn{padding:8px 14px;cursor:pointer;font-weight:600}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.primary{color:#07130c}}
+:root[data-theme="dark"] .btn.primary{color:#07130c}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.count{color:var(--muted);margin-left:auto;font-size:12.5px}
+input.sc{width:42px;height:28px;text-align:center;font:inherit;font-variant-numeric:tabular-nums;color:var(--text);
+  background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:0 2px;-moz-appearance:textfield;appearance:textfield}
+input.sc::-webkit-outer-spin-button,input.sc::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+input.od{width:56px;height:28px;text-align:center;font:inherit;font-variant-numeric:tabular-nums;color:var(--text);
+  background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:0 2px}
+input:disabled{opacity:.6}
+tr.unp td{color:var(--muted)}
+tr.unp td.tm{color:var(--muted)}
+.res{display:inline-block;min-width:22px;padding:1px 6px;border-radius:5px;font-weight:700;text-align:center;font-size:12.5px}
+.res.r1{background:var(--accent-soft);color:var(--c1)}
+.res.rX{background:var(--surface2);color:var(--cx)}
+.res.r2{background:var(--surface2);color:var(--c2)}
+.res.r2{background:color-mix(in srgb,var(--c2) 16%,transparent)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.dot.no{background:transparent;border:1px solid var(--line)}
+.fav{color:var(--warn);font-weight:700}
+.sep td{border-top:2px solid var(--line)}
+textarea{width:100%;min-height:140px;padding:10px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px}
+.two{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:860px){.two{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;box-shadow:var(--shadow)}
+.panel h3{margin:0 0 6px;font-size:15px}
+.st-new{color:var(--accent);font-weight:600} .st-chg{color:var(--warn);font-weight:600} .st-same{color:var(--muted)} .st-bad{color:var(--hot);font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;color:var(--muted);font-size:12.5px;margin-top:8px}
+@media (max-width:560px){.wrap{padding:14px 10px 32px}h1{font-size:19px}}
+
+td.od{color:var(--muted)} td.od b{color:var(--text)}
+.warn{border:1px solid var(--hot);background:var(--hot-soft);border-radius:10px;padding:12px 14px;margin-bottom:16px}
+.foot{color:var(--muted);font-size:12.5px;margin-top:22px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Чемпионат Испании · La Liga 2026/27</h1>
+      <div class="sub" id="sub"></div>
+    </div>
+    <span class="badge" id="status"><i></i><span>Загрузка…</span></span>
+  </header>
+  <div id="fatal" class="warn" hidden></div>
+
+  <nav role="tablist" aria-label="Разделы">
+    <button role="tab" id="tab-series" aria-selected="true" aria-controls="p-series">Серии</button>
+    <button role="tab" id="tab-matches" aria-selected="false" aria-controls="p-matches">Матчи</button>
+    <button role="tab" id="tab-seasons" aria-selected="false" aria-controls="p-seasons">Сезоны</button>
+  </nav>
+
+  <section id="p-series" role="tabpanel" aria-labelledby="tab-series">
+    <div class="kpis" id="kpis"></div>
+    <div id="signals"></div>
+    <div class="tw"><table id="series-table"></table></div>
+    <p class="note">Серия — подряд идущие сыгранные матчи лиги (в хронологическом порядке), в которых выполнено условие. Ещё не сыгранные матчи серию не прерывают.
+      «Среднее» — среднее максимальных серий за 5 прошлых сезонов (21-22 … 25-26) без наибольшего и наименьшего значения; «Макс» — наибольшая серия за эти сезоны.
+      Отметка на шкале — 85% от среднего. «Победа фаворита» считается только по матчам, для которых есть коэффициенты К1 / Н / К2 (фаворит — исход с наименьшим коэффициентом).</p>
+  </section>
+
+  <section id="p-matches" role="tabpanel" aria-labelledby="tab-matches" hidden>
+    <div class="tools">
+      <div class="seg" id="view-seg" role="group" aria-label="Показать">
+        <button data-v="played" aria-pressed="true">Сыгранные</button>
+        <button data-v="upcoming" aria-pressed="false">Ближайшие</button>
+        <button data-v="all" aria-pressed="false">Все</button>
+      </div>
+      <select id="f-round" aria-label="Тур"></select>
+      <select id="f-team" aria-label="Команда"></select>
+      <button class="btn" id="f-sort">Новые сверху ↓</button>
+      <span class="count" id="f-count"></span>
+    </div>
+    <div class="tw tall"><table id="match-table"></table></div>
+    <div class="legend"><span><span class="res r1">1</span> победа хозяев</span><span><span class="res rX">X</span> ничья</span><span><span class="res r2">2</span> победа гостей</span><span><span class="dot"></span> условие выполнено (ОЗ — обе забьют, ТБ — тотал больше 2,5)</span><span><b>жирным</b> — коэффициент фаворита · <span class="fav">Ф</span> фаворит выиграл</span></div>
+  </section>
+
+  <section id="p-seasons" role="tabpanel" aria-labelledby="tab-seasons" hidden>
+    <h3 style="margin:0 0 8px;font-size:15px">Итоги сезонов</h3>
+    <div class="tw"><table id="season-table"></table></div>
+    <h3 style="margin:22px 0 8px;font-size:15px">Максимальные серии по сезонам</h3>
+    <div class="tw"><table id="maxrun-table"></table></div>
+    <p class="note">Данные прошлых сезонов рассчитаны по всем 380 матчам. Для текущего сезона показана наибольшая серия на данный момент.</p>
+  </section>
+
+  <p class="foot" id="foot"></p>
+</div>
+
+<script>
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => Array.from(el.querySelectorAll(s));
+const isNum = v => typeof v === 'number' && Number.isFinite(v);
+const fmtDate = iso => iso ? iso.slice(8, 10) + '.' + iso.slice(5, 7) + '.' : '';
+const pct = (a, b) => b ? (100 * a / b) : 0;
+const f1 = x => (Math.round(x * 10) / 10).toFixed(1).replace('.', ',');
+const f2 = x => (Math.round(x * 100) / 100).toFixed(2).replace('.', ',');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+let DATA = null, F = [], TEAMS = [];
+const ST = { view: 'played', round: 'all', team: 'all', desc: true };
+
+/* ---------- state ---------- */
+const isPlayed = f => isNum(f.hg) && isNum(f.ag);
+const oddsOf = f => (Array.isArray(f.odds) && f.odds.length === 3 && f.odds.every(x => isNum(x) && x >= 1.01)) ? f.odds : null;
+const outcome = (h, a) => h > a ? '1' : h < a ? '2' : 'X';
+function isFavWin(f) {
+  const o = oddsOf(f); if (!o || !isPlayed(f)) return null;
+  const idx = f.hg > f.ag ? 0 : f.hg < f.ag ? 2 : 1;
+  return o[idx] === Math.min(o[0], o[1], o[2]);
+}
+const playedList = () => F.filter(isPlayed).map(f => ({ f, h: f.hg, a: f.ag }));
+
+/* ---------- categories ---------- */
+const CATS = {
+  h_nw15: { l: 'К1 не выигр. −1,5', t: m => !(m.h - m.a > 1.5) },
+  h_nl:   { l: 'К1 не проиграет',    t: m => m.h >= m.a },
+  h_sc:   { l: 'К1 забьёт',          t: m => m.h >= 1 },
+  h_ns:   { l: 'К1 не забьёт',       t: m => m.h === 0 },
+  h15:    { l: 'Кмд1 > 1,5',         t: m => m.h > 1.5 },
+  w1:     { l: 'Победа 1',           t: m => m.h > m.a },
+  a_nw15: { l: 'К2 не выигр. −1,5', t: m => !(m.a - m.h > 1.5) },
+  a_nl:   { l: 'К2 не проиграет',    t: m => m.a >= m.h },
+  a_sc:   { l: 'К2 забьёт',          t: m => m.a >= 1 },
+  a_ns:   { l: 'К2 не забьёт',       t: m => m.a === 0 },
+  a15:    { l: 'Кмд2 > 1,5',         t: m => m.a > 1.5 },
+  w2:     { l: 'Победа 2',           t: m => m.a > m.h },
+  dr:     { l: 'Ничья',              t: m => m.h === m.a },
+  o25:    { l: 'Тотал > 2,5',        t: m => m.h + m.a > 2.5 },
+  nbtts:  { l: 'Обе НЕ забьют',      t: m => m.h === 0 || m.a === 0 },
+  btts:   { l: 'Обе забьют',         t: m => m.h > 0 && m.a > 0 },
+  wf:     { l: 'Победа фаворита',    t: m => isFavWin(m.f) },
+};
+const GROUPS = [
+  ['Команда 1 (хозяева)', ['h_nw15', 'h_nl', 'h_sc', 'h_ns', 'h15', 'w1']],
+  ['Команда 2 (гости)',   ['a_nw15', 'a_nl', 'a_sc', 'a_ns', 'a15', 'w2']],
+  ['Матч',                ['dr', 'o25', 'nbtts', 'btts', 'wf']],
+];
+function calcCat(key, list) {
+  const t = CATS[key].t; let n = 0, hit = 0, run = 0, max = 0, runs = 0;
+  for (const m of list) {
+    const v = t(m); if (v === null) continue;      // нет данных (нет коэффициентов) — пропускаем, серию не рвём
+    n++;
+    if (v) { hit++; run++; if (run === 1) runs++; if (run > max) max = run; } else run = 0;
+  }
+  return { n, hit, runs, max, cur: run };
+}
+function histStats(key) {
+  const vals = Object.values(DATA.seasons).map(s => s.maxrun[key]);
+  if (!vals.length || vals.some(v => v === undefined)) return null;
+  const sum = vals.reduce((a, b) => a + b, 0);
+  const avg = vals.length > 2 ? (sum - Math.max(...vals) - Math.min(...vals)) / (vals.length - 2) : sum / vals.length;
+  return { avg, max: Math.max(...vals) };
+}
+
+/* ---------- series ---------- */
+function renderSeries() {
+  const list = playedList(), signals = [];
+  let html = '<thead><tr><th class="l">Категория</th><th>Игр</th><th>Совпад.</th><th>%</th><th>Серий</th><th>Макс. серия</th><th>Текущая</th><th>Среднее</th><th>Макс (5 сез.)</th><th class="l">Текущая / среднее</th></tr></thead><tbody>';
+  for (const [g, keys] of GROUPS) {
+    html += `<tr class="grp"><td colspan="10">${esc(g)}</td></tr>`;
+    for (const k of keys) {
+      const c = calcCat(k, list), h = histStats(k);
+      let cls = '', cell = '<span class="pct">—</span>', avgTxt = '—', maxTxt = '—';
+      if (h) {
+        avgTxt = f1(h.avg); maxTxt = String(h.max);
+        const ratio = h.avg ? c.cur / h.avg : 0, sig = c.cur > 0 && ratio >= 0.85, over = c.cur > h.max;
+        cls = over ? 'over' : sig ? 'sig' : '';
+        if (sig || over) signals.push({ l: CATS[k].l, cur: c.cur, avg: h.avg, over });
+        cell = `<span class="pct">${Math.round(ratio * 100)}%</span><span class="bar" title="85% от среднего"><i style="width:${Math.min(100, ratio * 100)}%"></i><b style="left:85%"></b></span>`;
+      }
+      html += `<tr class="${cls}"><td class="cat l">${esc(CATS[k].l)}</td><td>${c.n}</td><td>${c.hit}</td><td>${c.n ? f1(pct(c.hit, c.n)) + '%' : '—'}</td><td>${c.runs}</td><td>${c.max}</td><td class="cur">${c.cur}</td><td>${avgTxt}</td><td>${maxTxt}</td><td class="l">${cell}</td></tr>`;
+    }
+  }
+  $('#series-table').innerHTML = html + '</tbody>';
+  $('#signals').innerHTML = signals.length
+    ? `<div class="callout sig"><h3>Серии в зоне ≥ 85% от среднего: ${signals.length}</h3><p>Правило: рассматривать вхождение в серию при 85% от среднего значения.</p><div class="chips">` +
+      signals.map(s => `<span class="chip">${esc(s.l)} · ${s.cur} из ${f1(s.avg)}${s.over ? ' · выше рекорда' : ''}</span>`).join('') + '</div></div>'
+    : '<div class="callout"><h3>Сейчас ни одна серия не дошла до 85% от среднего</h3><p>Как только текущая серия достигнет порога, она появится здесь и подсветится в таблице.</p></div>';
+}
+
+function renderKpis() {
+  const list = playedList(), n = list.length;
+  const w1 = list.filter(m => m.h > m.a).length, dr = list.filter(m => m.h === m.a).length, w2 = n - w1 - dr;
+  const goals = list.reduce((s, m) => s + m.h + m.a, 0);
+  const o25 = list.filter(m => m.h + m.a > 2.5).length, bt = list.filter(m => m.h > 0 && m.a > 0).length;
+  const withOdds = list.filter(m => oddsOf(m.f)).length;
+  const kp = (b, s, sm) => `<div class="kpi"><b>${b}</b><span>${s}</span>${sm ? `<small>${sm}</small>` : ''}</div>`;
+  $('#kpis').innerHTML =
+    kp(`${n} <span style="font-size:13px;color:var(--muted);font-weight:400">из ${F.length}</span>`, 'сыграно матчей', n ? `последний матч ${fmtDate(list[n - 1].f.d)}` : '') +
+    kp(n ? f1(pct(w1, n)) + '%' : '—', 'победы хозяев (П1)', `${w1} из ${n}`) +
+    kp(n ? f1(pct(dr, n)) + '%' : '—', 'ничьи (Н)', `${dr} из ${n}`) +
+    kp(n ? f1(pct(w2, n)) + '%' : '—', 'победы гостей (П2)', `${w2} из ${n}`) +
+    kp(n ? f2(goals / n) : '—', 'голов за матч', `${goals} всего`) +
+    kp(n ? f1(pct(o25, n)) + '%' : '—', 'тотал > 2,5', `${o25} из ${n}`) +
+    kp(n ? f1(pct(bt, n)) + '%' : '—', 'обе забьют', `${bt} из ${n}`) +
+    kp(`${withOdds}`, 'сыгранных с коэффициентами', 'нужны для «Победа фаворита»');
+  const next = F.find(f => !isPlayed(f));
+  $('#sub').textContent = next ? `Сыграно ${n} из ${F.length} · дальше: ${next.h} — ${next.a}, ${fmtDate(next.d)}${next.t ? ' ' + next.t : ''} (тур ${next.r})` : `Сыграно ${n} из ${F.length}`;
+}
+
+function renderSeasons() {
+  const list = playedList(), n = list.length;
+  const rowOf = (lab, o, live) => { const m = o.n;
+    return `<tr${live ? ' class="sig"' : ''}><td class="l cat">${lab}</td><td>${m}</td><td>${o.w1}</td><td>${f1(pct(o.w1, m))}%</td><td>${o.dr}</td><td>${f1(pct(o.dr, m))}%</td><td>${o.w2}</td><td>${f1(pct(o.w2, m))}%</td><td>${f2(o.goals / m)}</td><td>${f1(pct(o.o25, m))}%</td><td>${f1(pct(o.btts, m))}%</td></tr>`; };
+  const S = Object.values(DATA.seasons);
+  const tot = S.reduce((a, s) => ({ n: a.n + s.n, w1: a.w1 + s.w1, dr: a.dr + s.dr, w2: a.w2 + s.w2, goals: a.goals + s.goals, o25: a.o25 + s.o25, btts: a.btts + s.btts }), { n: 0, w1: 0, dr: 0, w2: 0, goals: 0, o25: 0, btts: 0 });
+  const cur = { n, w1: list.filter(m => m.h > m.a).length, dr: list.filter(m => m.h === m.a).length, w2: list.filter(m => m.h < m.a).length,
+    goals: list.reduce((s, m) => s + m.h + m.a, 0), o25: list.filter(m => m.h + m.a > 2.5).length, btts: list.filter(m => m.h > 0 && m.a > 0).length };
+  let html = '<thead><tr><th class="l">Сезон</th><th>Матчей</th><th>П1</th><th>%П1</th><th>Н</th><th>% ничьих</th><th>П2</th><th>%П2</th><th>Голов/матч</th><th>ТБ 2,5</th><th>Обе забьют</th></tr></thead><tbody>';
+  for (const s of S) html += rowOf(s.season, s, false);
+  html += rowOf('ИТОГО ' + S.length + ' сез.', tot, false).replace('<tr>', '<tr class="sep">');
+  if (n) html += rowOf('26-27 (идёт)', cur, true);
+  $('#season-table').innerHTML = html + '</tbody>';
+  const labs = Object.keys(DATA.seasons);
+  let h2 = '<thead><tr><th class="l">Категория</th>' + labs.map(l => `<th>${l}</th>`).join('') + '<th>Среднее</th><th>Макс</th><th>26-27 сейчас</th></tr></thead><tbody>';
+  for (const [g, keys] of GROUPS) {
+    h2 += `<tr class="grp"><td colspan="${labs.length + 4}">${esc(g)}</td></tr>`;
+    for (const k of keys) {
+      const h = histStats(k), c = calcCat(k, list);
+      h2 += `<tr><td class="l cat">${esc(CATS[k].l)}</td>` + labs.map(l => `<td>${h ? DATA.seasons[l].maxrun[k] : '—'}</td>`).join('') +
+        `<td>${h ? f1(h.avg) : '—'}</td><td>${h ? h.max : '—'}</td><td class="cur">${c.n ? c.max : '—'}</td></tr>`;
+    }
+  }
+  $('#maxrun-table').innerHTML = h2 + '</tbody>';
+}
+
+/* ---------- matches ---------- */
+function rowHTML(f) {
+  const pl = isPlayed(f), o = oddsOf(f), mn = o ? Math.min(...o) : null;
+  const odCell = i => o ? (o[i] === mn ? `<b>${f2(o[i])}</b>` : f2(o[i])) : '';
+  let res = '', sum = '', bt = '', ov = '', fav = '';
+  if (pl) {
+    const r = outcome(f.hg, f.ag), fw = isFavWin(f);
+    sum = f.hg + f.ag; res = `<span class="res r${r}">${r}</span>`;
+    bt = `<span class="dot${f.hg > 0 && f.ag > 0 ? '' : ' no'}"></span>`;
+    ov = `<span class="dot${f.hg + f.ag > 2.5 ? '' : ' no'}"></span>`;
+    fav = fw === null ? '' : fw ? '<span class="fav">Ф</span>' : '<span style="color:var(--muted)">–</span>';
+  }
+  return `<tr class="${pl ? '' : 'unp'}"><td class="l">${f.r}</td><td class="l">${fmtDate(f.d)}</td><td class="l tm">${f.t || ''}</td><td class="l cat">${esc(f.h)}</td><td class="l cat">${esc(f.a)}</td>` +
+    `<td class="c cur">${pl ? f.hg + ' : ' + f.ag : '—'}</td><td class="c">${sum}</td><td class="c">${res}</td><td class="c">${bt}</td><td class="c">${ov}</td>` +
+    `<td class="c od">${odCell(0)}</td><td class="c od">${odCell(1)}</td><td class="c od">${odCell(2)}</td><td class="c">${fav}</td></tr>`;
+}
+function visibleFixtures() {
+  let L = F.filter(f => (ST.round === 'all' || f.r === +ST.round) && (ST.team === 'all' || f.h === ST.team || f.a === ST.team));
+  if (ST.view === 'played') L = L.filter(isPlayed);
+  if (ST.view === 'upcoming') L = L.filter(f => !isPlayed(f));
+  return ST.desc ? L.slice().reverse() : L;
+}
+function renderTable() {
+  const L = visibleFixtures();
+  $('#match-table').innerHTML = '<thead><tr><th class="l">Тур</th><th class="l">Дата</th><th class="l">Время</th><th class="l">Хозяева</th><th class="l">Гости</th><th class="c">Счёт</th><th class="c">Σ</th><th class="c">Исх</th><th class="c">ОЗ</th><th class="c">ТБ</th><th class="c">К1</th><th class="c">Н</th><th class="c">К2</th><th class="c">Ф</th></tr></thead><tbody>' + L.map(rowHTML).join('') + '</tbody>';
+  $('#f-count').textContent = `Показано: ${L.length}`;
+  $('#f-sort').textContent = ST.desc ? 'Новые сверху ↓' : 'Старые сверху ↑';
+}
+
+function initUi() {
+  const tabs = $$('nav [role="tab"]');
+  tabs.forEach(t => t.addEventListener('click', () => tabs.forEach(x => { const on = x === t; x.setAttribute('aria-selected', String(on)); $('#' + x.getAttribute('aria-controls')).hidden = !on; })));
+  $('#f-round').innerHTML = '<option value="all">Все туры</option>' + Array.from({ length: 38 }, (_, i) => `<option value="${i + 1}">Тур ${i + 1}</option>`).join('');
+  $('#f-team').innerHTML = '<option value="all">Все команды</option>' + TEAMS.map(t => `<option>${esc(t)}</option>`).join('');
+  $('#f-round').addEventListener('change', e => { ST.round = e.target.value; renderTable(); });
+  $('#f-team').addEventListener('change', e => { ST.team = e.target.value; renderTable(); });
+  $('#f-sort').addEventListener('click', () => { ST.desc = !ST.desc; renderTable(); });
+  $$('#view-seg button').forEach(b => b.addEventListener('click', () => {
+    ST.view = b.dataset.v; ST.desc = ST.view === 'played';
+    $$('#view-seg button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    renderTable();
+  }));
+}
+
+/* ---------- load ---------- */
+function ago(iso) {
+  const min = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000));
+  if (min < 90) return `${min} мин назад`;
+  const h = Math.round(min / 60); if (h < 36) return `${h} ч назад`;
+  return `${Math.round(h / 24)} дн назад`;
+}
+async function load() {
+  try {
+    const r = await fetch('data/laliga.json?t=' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    DATA = await r.json();
+  } catch (e) {
+    const b = $('#status'); b.className = 'badge err'; b.lastElementChild.textContent = 'Нет данных';
+    const fa = $('#fatal'); fa.hidden = false;
+    fa.textContent = 'Не удалось загрузить data/laliga.json (' + e.message + '). Если вы открыли index.html двойным щелчком — запустите в папке «python -m http.server» и откройте http://localhost:8000, либо разместите папку на GitHub Pages.';
+    return;
+  }
+  F = DATA.fixtures; TEAMS = Array.from(new Set(F.map(f => f.h))).sort();
+  initUi(); renderKpis(); renderSeries(); renderSeasons(); renderTable();
+  const b = $('#status'); b.className = 'badge ok'; b.lastElementChild.textContent = 'Обновлено ' + ago(DATA.updated);
+  b.title = new Date(DATA.updated).toLocaleString('ru-RU');
+  let foot = 'Календарь и результаты — открытый набор openfootball (обновляется вручную волонтёрами, возможна задержка). Коэффициенты К1/Н/К2 — The Odds API, среднее по букмекерам на момент последнего снимка до начала матча.';
+  if (DATA.warnings && DATA.warnings.length) foot += ' Замечания последнего обновления: ' + DATA.warnings.map(esc).join('; ') + '.';
+  $('#foot').innerHTML = foot;
+}
+load();
+</script>
+</body>
+</html>
