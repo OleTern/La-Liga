@@ -3,7 +3,9 @@
 Обновляет data/laliga.json для страницы index.html.
 
   * календарь и результаты La Liga 2026/27 — открытый набор openfootball (GitHub);
-  * коэффициенты К1 / Н / К2 — The Odds API (нужен ключ в переменной ODDS_API_KEY).
+  * коэффициенты К1 / Н / К2 — The Odds API (нужен ключ в переменной ODDS_API_KEY);
+  * если openfootball отстаёт, результаты добираются из The Odds API (раздел scores, ~2 кредита за запрос,
+    только когда есть закончившиеся матчи без счёта) либо берутся из data/results.json (ручной ввод).
 
 Запуск:
   python scripts/update.py              # результаты + коэффициенты ближайших матчей
@@ -261,6 +263,60 @@ def backfill(key, fixtures, store, warnings):
                     store[fid] = dict(o=odds, n=n, t=stamp, src="hist")
 
 
+def kickoff_utc(f):
+    """Время начала матча в UTC (в календаре — местное время Испании)."""
+    t = f["t"] or "12:00"
+    local = dt.datetime.fromisoformat(f'{f["d"]}T{t}:00')
+    if ZoneInfo is not None:
+        return local.replace(tzinfo=ZoneInfo("Europe/Madrid")).astimezone(dt.timezone.utc)
+    return (local - dt.timedelta(hours=2)).replace(tzinfo=dt.timezone.utc)
+
+
+def pending_fixtures(fixtures, now):
+    """Матчи, которые уже должны были закончиться (не старше 3 суток — глубже scores не отдаёт), но счёта нет."""
+    out = []
+    for f in fixtures:
+        if f["hg"] is not None:
+            continue
+        ko = kickoff_utc(f)
+        if ko + dt.timedelta(hours=2) < now and now - ko <= dt.timedelta(days=3):
+            out.append(f)
+    return out
+
+
+def apply_results(fixtures, results):
+    """Подставляет сохранённые результаты; если openfootball уже знает счёт — он главнее, запись удаляется."""
+    n = 0
+    for f in fixtures:
+        if f["hg"] is not None:
+            results.pop(f["id"], None)
+        elif f["id"] in results:
+            f["hg"], f["ag"] = results[f["id"]]["r"]
+            n += 1
+    return n
+
+
+def fetch_scores(key, fixtures, results, now):
+    by_id = {f["id"]: f for f in fixtures}
+    data = api_json(f"/sports/{SPORT}/scores/", dict(apiKey=key, daysFrom=3, dateFormat="iso"))
+    saved = 0
+    for ev in data:
+        if not ev.get("completed"):
+            continue
+        fid, swapped = match_event(ev, by_id)
+        if not fid or swapped or by_id[fid]["hg"] is not None:
+            continue
+        sc = {x.get("name"): x.get("score") for x in (ev.get("scores") or [])}
+        try:
+            h, a = int(sc[ev["home_team"]]), int(sc[ev["away_team"]])
+        except (KeyError, TypeError, ValueError):
+            continue
+        results[fid] = dict(r=[h, a], src="api", t=now.strftime("%Y-%m-%dT%H:%M:%SZ"))
+        saved += 1
+    print(f"  результаты из The Odds API: добавлено {saved}")
+    return saved
+
+
 # ---------- main ----------
 def load_json(path, default):
     try:
@@ -292,8 +348,18 @@ def main():
         dump_json(DATA / "history.json", history)
 
     store = load_json(DATA / "odds.json", {})
+    results = load_json(DATA / "results.json", {})
     key = os.environ.get("ODDS_API_KEY", "").strip()
+    apply_results(fixtures, results)
     if key and "--no-odds" not in args:
+        pend = pending_fixtures(fixtures, now)
+        if pend:
+            print(f"Закончились, но без счёта: {len(pend)} — запрашиваю результаты")
+            try:
+                if fetch_scores(key, fixtures, results, now):
+                    apply_results(fixtures, results)
+            except Exception as e:
+                warnings.append(str(e))
         try:
             snapshot_odds(key, fixtures, store, now, warnings)
             if "--backfill" in args:
@@ -310,10 +376,17 @@ def main():
         f["odds"] = o if o and len(o) == 3 else None
         have += f["odds"] is not None
     dump_json(DATA / "odds.json", store, indent=1)
+    dump_json(DATA / "results.json", results, indent=1)
+
+    for f in fixtures:  # по календарю уже сыгран, а счёта нет ни в одном источнике — покажем на странице
+        ko = kickoff_utc(f)
+        if f["hg"] is None and ko + dt.timedelta(hours=3) < now and now - ko <= dt.timedelta(days=10):
+            warnings.append(f'нет результата: {f["h"]} — {f["a"]} ({f["d"][8:10]}.{f["d"][5:7]})')
+    played = sum(f["hg"] is not None for f in fixtures)
 
     out = dict(updated=now.strftime("%Y-%m-%dT%H:%M:%SZ"), season="2026/27", fixtures=fixtures, seasons=history, warnings=warnings[:20])
     dump_json(DATA / "laliga.json", out)
-    print(f"Готово: коэффициенты есть у {have} матчей")
+    print(f"Готово: сыграно {played}, коэффициенты есть у {have} матчей")
     for w in warnings:
         print("  ! " + w)
 
