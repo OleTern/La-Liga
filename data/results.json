@@ -1,18 +1,18 @@
 {
- "Espanyol|Atletico Madrid": {
+ "Deportivo|Levante": {
   "r": [
-   0,
+   1,
    1
   ],
   "src": "api",
-  "t": "2026-10-17T17:38:39Z"
+  "t": "2026-10-17T19:52:24Z"
  },
- "Villarreal|Elche": {
+ "Real Betis|Barcelona": {
   "r": [
-   0,
-   0
+   2,
+   5
   ],
   "src": "api",
-  "t": "2026-10-17T17:38:39Z"
+  "t": "2026-10-17T19:52:24Z"
  }
 }
