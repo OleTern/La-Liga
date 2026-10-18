@@ -284,13 +284,14 @@ def pending_fixtures(fixtures, now):
     return out
 
 
-def apply_results(fixtures, results):
-    """Подставляет сохранённые результаты; если openfootball уже знает счёт — он главнее, запись удаляется."""
+def apply_results(fixtures, results, of_known):
+    """Подставляет сохранённые результаты в матчи, у которых счёта нет в openfootball.
+    of_known — id матчей, счёт которых изначально есть в openfootball: он главнее, запись из results удаляется."""
     n = 0
     for f in fixtures:
-        if f["hg"] is not None:
+        if f["id"] in of_known:
             results.pop(f["id"], None)
-        elif f["id"] in results:
+        elif f["id"] in results and f["hg"] is None:
             f["hg"], f["ag"] = results[f["id"]]["r"]
             n += 1
     return n
@@ -350,14 +351,15 @@ def main():
     store = load_json(DATA / "odds.json", {})
     results = load_json(DATA / "results.json", {})
     key = os.environ.get("ODDS_API_KEY", "").strip()
-    apply_results(fixtures, results)
+    of_known = {f["id"] for f in fixtures if f["hg"] is not None}  # счёт есть в самом openfootball
+    apply_results(fixtures, results, of_known)
     if key and "--no-odds" not in args:
         pend = pending_fixtures(fixtures, now)
         if pend:
             print(f"Закончились, но без счёта: {len(pend)} — запрашиваю результаты")
             try:
                 if fetch_scores(key, fixtures, results, now):
-                    apply_results(fixtures, results)
+                    apply_results(fixtures, results, of_known)
             except Exception as e:
                 warnings.append(str(e))
         try:
