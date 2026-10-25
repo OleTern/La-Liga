@@ -158,5 +158,45 @@
   ],
   "src": "api",
   "t": "2026-10-21T23:49:27Z"
+ },
+ "Alaves|Malaga": {
+  "r": [
+   1,
+   1
+  ],
+  "src": "api",
+  "t": "2026-10-25T13:27:40Z"
+ },
+ "Rayo Vallecano|Elche": {
+  "r": [
+   0,
+   3
+  ],
+  "src": "api",
+  "t": "2026-10-25T13:27:40Z"
+ },
+ "Racing Santander|Espanyol": {
+  "r": [
+   2,
+   1
+  ],
+  "src": "api",
+  "t": "2026-10-25T13:27:40Z"
+ },
+ "Valencia|Villarreal": {
+  "r": [
+   1,
+   2
+  ],
+  "src": "api",
+  "t": "2026-10-25T13:27:40Z"
+ },
+ "Atletico Madrid|Deportivo": {
+  "r": [
+   1,
+   0
+  ],
+  "src": "api",
+  "t": "2026-10-25T13:27:40Z"
  }
 }
