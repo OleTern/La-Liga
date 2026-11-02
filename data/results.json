@@ -294,5 +294,21 @@
   ],
   "src": "api",
   "t": "2026-11-01T19:16:46Z"
+ },
+ "Elche|Valencia": {
+  "r": [
+   0,
+   1
+  ],
+  "src": "api",
+  "t": "2026-11-02T00:03:36Z"
+ },
+ "Athletic Bilbao|Real Sociedad": {
+  "r": [
+   2,
+   1
+  ],
+  "src": "api",
+  "t": "2026-11-02T00:03:36Z"
  }
 }
