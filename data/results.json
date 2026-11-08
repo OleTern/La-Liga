@@ -318,5 +318,61 @@
   ],
   "src": "api",
   "t": "2026-11-03T04:40:36Z"
+ },
+ "Sevilla|Alaves": {
+  "r": [
+   0,
+   0
+  ],
+  "src": "api",
+  "t": "2026-11-08T19:14:34Z"
+ },
+ "Malaga|Racing Santander": {
+  "r": [
+   1,
+   2
+  ],
+  "src": "api",
+  "t": "2026-11-08T19:14:34Z"
+ },
+ "Espanyol|Deportivo": {
+  "r": [
+   0,
+   0
+  ],
+  "src": "api",
+  "t": "2026-11-08T19:14:34Z"
+ },
+ "Osasuna|Athletic Bilbao": {
+  "r": [
+   1,
+   1
+  ],
+  "src": "api",
+  "t": "2026-11-08T19:14:34Z"
+ },
+ "Valencia|Real Madrid": {
+  "r": [
+   0,
+   3
+  ],
+  "src": "api",
+  "t": "2026-11-08T19:14:34Z"
+ },
+ "Elche|Real Betis": {
+  "r": [
+   0,
+   2
+  ],
+  "src": "api",
+  "t": "2026-11-08T19:14:34Z"
+ },
+ "Real Sociedad|Rayo Vallecano": {
+  "r": [
+   1,
+   0
+  ],
+  "src": "api",
+  "t": "2026-11-08T19:14:34Z"
  }
 }
