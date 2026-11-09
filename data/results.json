@@ -374,5 +374,29 @@
   ],
   "src": "api",
   "t": "2026-11-08T19:14:34Z"
+ },
+ "Celta Vigo|Levante": {
+  "r": [
+   0,
+   0
+  ],
+  "src": "api",
+  "t": "2026-11-09T00:21:18Z"
+ },
+ "Villarreal|Getafe": {
+  "r": [
+   2,
+   0
+  ],
+  "src": "api",
+  "t": "2026-11-09T00:21:18Z"
+ },
+ "Atletico Madrid|Barcelona": {
+  "r": [
+   1,
+   2
+  ],
+  "src": "api",
+  "t": "2026-11-09T00:21:18Z"
  }
 }
